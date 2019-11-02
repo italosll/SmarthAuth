@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Smart Auth</string>
+    <dimen name="dimen_margin_top_input">15dp</dimen>
+
+</resources>
