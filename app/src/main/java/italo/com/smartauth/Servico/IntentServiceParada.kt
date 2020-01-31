@@ -4,10 +4,10 @@ import android.app.IntentService
 import android.content.Intent
 import android.util.Log
 
-class  IntentService : IntentService("IntentService"){
+class  IntentServiceParada : IntentService("IntentService"){
 
     override fun onHandleIntent(p0: Intent?) {
-        ChecagemDeSegundoPlano.instance.reiniciar()
+        ChecagemDeSegundoPlano.instance.parar()
         /*
         for(i in 1..20){
             Log.d("MyService  ->>", "runing "+i)
