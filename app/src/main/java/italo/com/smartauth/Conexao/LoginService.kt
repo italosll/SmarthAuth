@@ -2,17 +2,19 @@ package italo.com.smartauth.Conexao
 
 
 import italo.com.smartauth.Modelo.LoginModelo
+import italo.com.smartauth.Modelo.PaginaWeb
+import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface LoginService{
 
-    @GET("ConsultaLogin/")
-    fun list(): Call<List<LoginModelo>>
+    @GET("loginStatus.js")
+    fun verificarTempo(): Call<ResponseBody>
 
-    @POST("CadastraLogin/")
-    fun efetuarLogin(@Body loginModelo: LoginModelo): Call<LoginModelo>
+    @FormUrlEncoded
+    @POST("auth.cgi")
+    fun efetuarLogin(@Field("uName") matricula : String, @Field("pass") senha: String): Call<ResponseBody>
+    //Nomes dos Field respeitando os padroes do SonicWall
 
 }

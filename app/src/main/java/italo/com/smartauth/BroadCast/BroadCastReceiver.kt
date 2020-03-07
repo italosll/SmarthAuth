@@ -11,8 +11,6 @@ import italo.com.smartauth.Servico.IntentService
 
 open class BroadCastReceiver :BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
-
-
         Toast.makeText(context, "my Receiver", Toast.LENGTH_SHORT).show()
 
         val intent = Intent(context, IntentService::class.java)

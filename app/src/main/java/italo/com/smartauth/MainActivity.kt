@@ -6,11 +6,14 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import italo.com.smartauth.BroadCast.BroadCastReceiver
 import italo.com.smartauth.BandoDeDados.DataBaseHandler
 import italo.com.smartauth.Modelo.LoginModelo
+import italo.com.smartauth.Servico.ChecagemDeSegundoPlano
+import italo.com.smartauth.Servico.EscutadorRespostaWeb
 import italo.com.smartauth.Servico.IntentService
 
 
@@ -88,6 +91,34 @@ class MainActivity : AppCompatActivity(), BroadCastReceiver.ConnectionReceiverLi
 
             dialog.show()
         }
+
+        /// AREA DE TESTE ABAIXO
+
+
+        //LoginWebClient().efetuarLogin(LoginModelo(0,"matricula","senha"))
+        var escutador  = object : EscutadorRespostaWeb() {
+            override fun deuBom(code : Int, bodyHttp : String) {
+                super.deuBom(code,bodyHttp)
+                Log.i("Deu bom", bodyHttp)
+                Log.i("Deu bom(body)", extrairBodyHtml(bodyHttp))
+            }
+
+        }
+        val checador = ChecagemDeSegundoPlano()
+        checador.definirEscutadorRespostaWeb(escutador)
+        //checador.realizarLogin(context)
+        Thread(object : Runnable{
+            override fun run(){
+                Thread.sleep(3000)
+                var retorno = ""+checador.getTempoRestanteLogin()
+                context.runOnUiThread(object : Runnable{
+                    override fun run() {
+                        Toast.makeText(context,retorno,Toast.LENGTH_LONG).show()
+                    }
+                })
+            }
+        }).start()
+
 
     }
 

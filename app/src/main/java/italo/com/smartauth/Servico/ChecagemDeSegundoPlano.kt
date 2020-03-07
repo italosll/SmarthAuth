@@ -1,6 +1,11 @@
 package italo.com.smartauth.Servico
 
+import android.content.Context
 import android.util.Log
+import italo.com.smartauth.BandoDeDados.DATABASE_NAME
+import italo.com.smartauth.BandoDeDados.DataBaseHandler
+import italo.com.smartauth.Conexao.WebClient
+import italo.com.smartauth.Modelo.LoginModelo
 import italo.com.smartauth.Servico.programas.TesteLogin
 import java.net.HttpURLConnection
 import java.net.URL
@@ -12,6 +17,8 @@ import java.util.regex.Pattern
 
 
 class  ChecagemDeSegundoPlano {
+    var escutadorRespostaWeb = EscutadorRespostaWeb()
+    var context : Context? = null
 
     companion object {
         var instance = ChecagemDeSegundoPlano()
@@ -24,9 +31,13 @@ class  ChecagemDeSegundoPlano {
         var programaTesteInternet : TimerTask? = null
     }
 
-    fun reiniciar(){
+    fun definirEscutadorRespostaWeb(escutadorRespostaWeb: EscutadorRespostaWeb){
+        this.escutadorRespostaWeb = escutadorRespostaWeb
+    }
+
+    fun reiniciar(context : Context){
         parar()
-        comecar()
+        comecar(context)
     }
 
     fun parar(){
@@ -38,7 +49,8 @@ class  ChecagemDeSegundoPlano {
         Log.d("SmartAuthService  ->>", "Encerrado")
     }
 
-    fun comecar(){
+    fun comecar(context : Context){
+        this.context = context
         Log.d("SmartAuthService  ->>", "Inicializando ")
         agenda = Timer()
         programaTesteLogin = TesteLogin(this)
@@ -61,31 +73,41 @@ class  ChecagemDeSegundoPlano {
         return status
     }
 
-    fun getTempoReastanteLogin(): Int{
+    fun getTempoRestanteLogin(): Int{
         //##### Realizar uma conexao aqui com retrofit #####
-        var body = "<html> ETC ETC ETC que veio da conexao"
-        var valorPoluidoComTags = procurarPadrao("",body)
+        val webClient = WebClient(escutadorRespostaWeb)
+        var body = webClient.verificarTempo()
+        var valorPoluidoComTags = procurarPadrao("var[ ]remainingTime[ ]=[ ]\\d+[;]",body)
         if(valorPoluidoComTags==null)return -1
-        val intValue = valorPoluidoComTags.replace("([<][^>]+[>])", "")
+        val intValue = procurarPadrao("\\d+",valorPoluidoComTags)
         try {
+            if(intValue==null)return -1
             return Integer.parseInt(intValue)
         } catch (e: ParseException) {
             return -1//Nao foi possivel obter tempo restante, possivelmente esta deslogado
         }
 
     }
+    
     fun procurarPadrao(padrao : String, dados: String): String?{
 
         val pattern = Pattern.compile(padrao)
         val matcher = pattern.matcher(dados)
         if (matcher.find()) {
-            return matcher.group(1)
+            return matcher.group()
         }
         return null
     }
 
     fun realizarLogin(){
+        context?.let { realizarLogin(it) }
+    }
+    fun realizarLogin(context : Context){
         //##### Realizar uma conexao aqui com retrofit #####
+        for(login in DataBaseHandler(context).read()){
+            WebClient(escutadorRespostaWeb).efetuarLogin(login)
+            break
+        }
     }
 
 }

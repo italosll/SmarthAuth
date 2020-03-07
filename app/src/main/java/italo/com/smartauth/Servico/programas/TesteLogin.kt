@@ -9,7 +9,7 @@ class TesteLogin : TimerTask{
         this.checador=checador
     }
     override fun run() {
-        var tempoRestante = checador.getTempoReastanteLogin()*1000
+        var tempoRestante = checador.getTempoRestanteLogin()*1000*60
         if(tempoRestante!=-1){
             //Verificar se o tempo restante é muito curto
             if(tempoRestante - ChecagemDeSegundoPlano.tempoChecarStatusLogin < 60000){//Menos de um minuto restante na proxima checagem
