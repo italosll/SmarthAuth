@@ -47,6 +47,15 @@
             android:fontFamily="@font/roboto_light_italic"
             android:layout_marginBottom="8dp"/>
 
+    <Button
+        android:id="@+id/botao_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#4CAF50"
+        android:text=" Fazer Login SW "
+        tools:layout_editor_absoluteX="152dp"
+        tools:layout_editor_absoluteY="400dp" />
+
     <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
@@ -85,8 +94,6 @@
         </androidx.appcompat.widget.AppCompatImageView>
 
     </LinearLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
