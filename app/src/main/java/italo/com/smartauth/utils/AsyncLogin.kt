@@ -24,7 +24,7 @@ class AsyncLogin : AsyncTask<Context,Void,Boolean>(){
          */
         var checador : ChecagemDeSegundoPlano? = null
         params[0]?.let { checador = ChecagemDeSegundoPlano(it) }
-        if(checador==null) ChecagemDeSegundoPlano()
+        if(checador==null) checador = ChecagemDeSegundoPlano()
         //checador?.definirEscutadorRespostaWeb(escutador)
         //checador.realizarLogin(context)
         checador?.realizarLogin()

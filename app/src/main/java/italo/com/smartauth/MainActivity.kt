@@ -16,6 +16,7 @@ import italo.com.smartauth.Servico.ChecagemDeSegundoPlano
 import italo.com.smartauth.Servico.EscutadorRespostaWeb
 import italo.com.smartauth.Servico.IntentService
 import italo.com.smartauth.utils.AsyncLogin
+import italo.com.smartauth.utils.AsyncTempoRestante
 
 
 class MainActivity : AppCompatActivity(), BroadCastReceiver.ConnectionReceiverListener {
@@ -95,13 +96,21 @@ class MainActivity : AppCompatActivity(), BroadCastReceiver.ConnectionReceiverLi
 
         /// AREA DE TESTE ABAIXO
 
-
-        //LoginWebClient().efetuarLogin(LoginModelo(0,"matricula","senha"))
-
         val botao_logar = findViewById<Button>(R.id.botao_login)
         botao_logar.setOnClickListener {
             AsyncLogin().execute(this)
         }
+        val texto_tempo_restante = findViewById<TextView>(R.id.text_tempo_restante)
+        val imagem_atualizar = findViewById<ImageView>(R.id.img_atualizador_tempo)
+        imagem_atualizar.setOnClickListener {
+            AsyncTempoRestante(this)
+                .setBotaoView(imagem_atualizar)
+                .execute(texto_tempo_restante)
+        }
+
+        AsyncTempoRestante(this)
+            .setBotaoView(imagem_atualizar)
+            .execute(texto_tempo_restante)
 
     }
 

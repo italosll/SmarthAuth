@@ -90,7 +90,7 @@ class  ChecagemDeSegundoPlano {
             if(intValue==null)return -1
             return Integer.parseInt(intValue)
         } catch (e: ParseException) {
-            return -1//Nao foi possivel obter tempo restante, possivelmente esta deslogado
+            return -1//Nao foi possivel obter tempo restante
         }
     }
 
