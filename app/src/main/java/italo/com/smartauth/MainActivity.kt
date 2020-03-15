@@ -15,6 +15,7 @@ import italo.com.smartauth.Modelo.LoginModelo
 import italo.com.smartauth.Servico.ChecagemDeSegundoPlano
 import italo.com.smartauth.Servico.EscutadorRespostaWeb
 import italo.com.smartauth.Servico.IntentService
+import italo.com.smartauth.utils.AsyncLogin
 
 
 class MainActivity : AppCompatActivity(), BroadCastReceiver.ConnectionReceiverListener {
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity(), BroadCastReceiver.ConnectionReceiverLi
         //-------------------------------[  END  ]------------------------------------------------------------------------------------
 
 
-        //context = this
+        context = this
         val banner_configuracao = findViewById<LinearLayout>(R.id.linearLayout)
         val context = this  // Contexto da Main Activity
         val db = DataBaseHandler(context) // Instância do banco de dados
@@ -96,31 +97,14 @@ class MainActivity : AppCompatActivity(), BroadCastReceiver.ConnectionReceiverLi
 
 
         //LoginWebClient().efetuarLogin(LoginModelo(0,"matricula","senha"))
-        var escutador  = object : EscutadorRespostaWeb() {
-            override fun deuBom(code : Int, bodyHttp : String) {
-                super.deuBom(code,bodyHttp)
-                Log.i("Deu bom", bodyHttp)
-                Log.i("Deu bom(body)", extrairBodyHtml(bodyHttp))
-            }
 
+        val botao_logar = findViewById<Button>(R.id.botao_login)
+        botao_logar.setOnClickListener {
+            AsyncLogin().execute(this)
         }
-        val checador = ChecagemDeSegundoPlano()
-        checador.definirEscutadorRespostaWeb(escutador)
-        //checador.realizarLogin(context)
-        Thread(object : Runnable{
-            override fun run(){
-                Thread.sleep(3000)
-                var retorno = ""+checador.getTempoRestanteLogin()
-                context.runOnUiThread(object : Runnable{
-                    override fun run() {
-                        Toast.makeText(context,retorno,Toast.LENGTH_LONG).show()
-                    }
-                })
-            }
-        }).start()
-
 
     }
+
 
 
 
